@@ -64,11 +64,10 @@ class LinkedList:
         # case: empty list
         if self.lenght == 0:
             self.head = self.new_node
-            self.tail = self.head
+            self.tail = self.new_node
         else:
-            self.new_node.next = self.head.next
-            
-
+            self.new_node.next = self.head
+            self.head = self.new_node
         self.lenght += 1
 
         # not important
@@ -91,5 +90,14 @@ print('Head:', linked_list.head.value)
 print('Tail:', linked_list.tail.value)
 print('Len:', linked_list.lenght)
 
+print('Pop twice:')
 print('Poped item:', linked_list.pop().value)
 print('Poped item:', linked_list.pop().value)
+
+print('Prepend 2:')
+linked_list.prepend(2)
+linked_list.print_list()
+
+print('Head:', linked_list.head.value)
+print('Tail:', linked_list.tail.value)
+print('Len:', linked_list.lenght)
