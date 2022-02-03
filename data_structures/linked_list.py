@@ -1,3 +1,9 @@
+from hashlib import new
+
+
+# TODO: implement LL methods as built-ins class __method__ (magic methods) if applicable
+
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -40,13 +46,13 @@ class LinkedList:
         
         # iter over list to find last and previous; previous will be assigned as the last
         # last points to None; both start from the beggining
-        temp = self.head
+        node = self.head
         pre = self.head
 
         # loop to assign last (node.next == None)
-        while temp.next:
-            pre = temp
-            temp = temp.next
+        while node.next:
+            pre = node
+            node = node.next
         # assign previous as last & decrease list len
         self.tail = pre
         self.tail.next = None
@@ -57,7 +63,7 @@ class LinkedList:
             self.head = None
             self.tail = None
         
-        return temp
+        return node
     
     def prepend(self, value):
         self.new_node = Node(value)
@@ -73,31 +79,69 @@ class LinkedList:
         # not important
         return True
 
+    def pop_first(self):
+        if self.lenght == 0:
+            return None
+        
+        # self.head - we want to return
+        # assign self.head to new one
+        node = self.head
+        self.lenght -= 1
+
+        if self.lenght == 0:
+            self.head = None
+            self.tail = None
+        else:
+            self.head = node.next
+
+        node.next = None
+        return node
+    
+    # index methods should raise IndexError instead of None
+    def get_value(self, index):
+        # index means the number of node; LL doesn't have arrays' like indexes
+        if index < 0 or index >= self.lenght:
+            raise IndexError('Index {} is out of range.'.format(index))
+
+        # start from head to find on index
+        node = self.head
+
+        for _ in range(index):
+            node = node.next
+        return node
+    
+    def set_value(self, index, value):
+        node = self.get_value(index)      
+        node.value = value
+        return True
+    
+    def insert(self, index, value):
+        # validate index value and find node on prev index, 
+        # to get prev node and link it with a new one
+
+        # cases to insert as a first node/last node <- assuming we reset head/tail
+        if index == 0:
+            return self.prepend(value)
+        
+        pre_node = self.get_value(index - 1)
+
+        if not pre_node.next:
+            return self.append(value)
+        
+        node_to_move = pre_node.next
+        new_node = Node(value)
+
+        pre_node.next = new_node
+        new_node.next = node_to_move
+        return True
+
 
 linked_list = LinkedList(4)
-print('Head:', linked_list.head.value)
-print('Tail:', linked_list.tail.value)
-print('Len:', linked_list.lenght)
 
 linked_list.append(6)
 linked_list.append(8)
 linked_list.append(10)
 linked_list.append(12)
 
+
 linked_list.print_list()
-
-print('Head:', linked_list.head.value)
-print('Tail:', linked_list.tail.value)
-print('Len:', linked_list.lenght)
-
-print('Pop twice:')
-print('Poped item:', linked_list.pop().value)
-print('Poped item:', linked_list.pop().value)
-
-print('Prepend 2:')
-linked_list.prepend(2)
-linked_list.print_list()
-
-print('Head:', linked_list.head.value)
-print('Tail:', linked_list.tail.value)
-print('Len:', linked_list.lenght)
