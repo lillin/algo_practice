@@ -1,6 +1,3 @@
-from hashlib import new
-
-
 # TODO: implement LL methods as built-ins class __method__ (magic methods) if applicable
 
 
@@ -134,6 +131,67 @@ class LinkedList:
         pre_node.next = new_node
         new_node.next = node_to_move
         return True
+
+    def remove(self, index):
+        # IndexError if not index
+        node = self.get_value(index)
+
+        try:
+            pre_node = self.get_value(index - 1)
+        except IndexError:
+            # node we got - the first node: reset head pointer to node.next
+            self.head = node.next
+                
+            if node.next == None:
+                self.tail == None
+        else:
+            pre_node.next = node.next
+
+        node.next = None
+        self.lenght -= 1
+
+        return node
+    
+    def remove_(self, index):
+        """
+        Implements approach from the course.
+
+        P.S. Don't like it, coz rep of logic in .get_value()
+        """
+
+        if index < 0 or index >= self.lenght:
+            return None
+        if index == 0:
+            return self.pop_first()
+        if index == self.lenght - 1:
+            return self.pop()
+        pre_node = self.get_value(index - 1)
+        node = pre_node.next
+        pre_node.next = node.next
+        node.next = None
+        self.lenght -= 1
+        return node
+
+    def reverse(self):
+        """
+        head->[11]->[3]->[23]->[7]->None<-tail to 
+        tail->None<-[11]<-[3]<-[23]<-[7]<-head
+        """
+        # 1. reverse head and tail
+        node = self.head
+        self.head = self.tail
+        self.tail = node
+        # node.next = None
+        pre_node = None
+        next_node = node.next
+        # 2. move pre_node, node, next_node in loop (for/while): 
+        # links next.next to node, node.next to pre etc.
+        for _ in range(self.lenght):
+            next_node = node.next
+            node.next = next_node
+            # 3. there's a gab between node and next_node
+            pre_node = node
+            node = next_node
 
 
 linked_list = LinkedList(4)
